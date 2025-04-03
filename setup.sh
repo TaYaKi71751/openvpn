@@ -4,10 +4,10 @@ apk add openvpn easy-rsa iptables openvpn-auth-pam
 apk add pam
 cat > /etc/openvpn/server.conf << EOF
 port 1194
-proto tcp  # Use TCP instead of UDP
+proto tcp
 dev tun
-local 172.20.10.1  # Bind OpenVPN to the local IP
-server 10.8.0.0 255.255.255.0  # VPN subnet
+local 172.20.10.1  # Bind to the local IP
+server 10.8.0.0 255.255.255.0
 ifconfig-pool-persist /etc/openvpn/ipp.txt
 keepalive 10 120
 persist-key
@@ -16,6 +16,7 @@ status /dev/null
 log /dev/null
 verb 3
 push "dhcp-option DNS 1.1.1.1"
+
 plugin /usr/lib/openvpn/plugins/openvpn-plugin-auth-pam.so openvpn
 EOF
 cat > /etc/openvpn/check_login.sh << EOF
