@@ -65,6 +65,6 @@ EOF
 echo 'echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf' >> ~/.profile
 echo 'sysctl -p' >> ~/.profile
 echo "cat /dev/location > /dev/null &" >> ~/.profile
-echo "httpd -f &" >> ~/.profile
+echo "httpd &" >> ~/.profile
 echo "openvpn --config /etc/openvpn/server.conf" >> ~/.profile
 source ~/.profile
