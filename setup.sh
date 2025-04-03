@@ -18,6 +18,10 @@ verb 3
 # Use static key authentication (NO TLS, NO username/password)
 tls-server
 secret /etc/openvpn/static.key
+
+# Define a cipher explicitly to avoid warnings
+cipher BF-CBC
+data-ciphers-fallback BF-CBC
 EOF
 openvpn --genkey --secret /etc/openvpn/static.key
 cat > /var/www/localhost/htdocs/hotspot.ovpn << EOF
@@ -35,6 +39,9 @@ tls-server
 <secret>
 $(cat /etc/openvpn/static.key)
 </secret>
+
+cipher BF-CBC
+data-ciphers-fallback BF-CBC
 EOF
 chmod 644 /var/www/localhost/htdocs/hotspot.ovpn
 cat >> /etc/apache2/httpd.conf << EOF
