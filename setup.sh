@@ -16,6 +16,7 @@ log /dev/null
 verb 3
 
 # Use static key authentication (NO TLS, NO username/password)
+tls-server
 secret /etc/openvpn/static.key
 EOF
 openvpn --genkey --secret /etc/openvpn/static.key
@@ -30,6 +31,7 @@ persist-key
 persist-tun
 verb 3
 
+tls-server
 <secret>
 $(cat /etc/openvpn/static.key)
 </secret>
