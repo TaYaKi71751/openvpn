@@ -2,7 +2,6 @@
 apk update
 apk add openvpn easy-rsa
 apk add apache2
-apk add nodejs npm
 cat > /etc/openvpn/server.conf << EOF
 port 1194
 proto tcp
@@ -19,7 +18,6 @@ verb 3
 # Use static key authentication (NO TLS, NO username/password)
 secret /etc/openvpn/static.key
 EOF
-npm i -g serve
 openvpn --genkey --secret /etc/openvpn/static.key
 cat > /var/www/localhost/htdocs/hotspot.ovpn << EOF
 client
