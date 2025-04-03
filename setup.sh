@@ -2,6 +2,10 @@
 apk update
 apk add openvpn easy-rsa
 apk add apache2
+easyrsa init-pki
+easyrsa build-ca nopass
+easyrsa build-server-full server nopass
+easyrsa build-client-full client nopass
 cat > /etc/openvpn/server.conf << EOF
 port 1194
 proto tcp
@@ -15,14 +19,13 @@ status /dev/null
 log /dev/null
 verb 3
 
-# Use static key authentication (NO TLS, NO DH file)
-secret /etc/openvpn/static.key
-
-# Define a cipher explicitly to avoid warnings
-cipher BF-CBC
-data-ciphers-fallback BF-CBC
+# Use TLS authentication instead of static key
+ca /etc/openvpn/pki/ca.crt
+cert /etc/openvpn/pki/issued/server.crt
+key /etc/openvpn/pki/private/server.key
+dh /etc/openvpn/pki/dh.pem
+tls-server
 EOF
-openvpn --genkey --secret /etc/openvpn/static.key
 cat > /var/www/localhost/htdocs/hotspot.ovpn << EOF
 client
 dev tun
@@ -34,12 +37,19 @@ persist-key
 persist-tun
 verb 3
 
-<secret>
-$(cat /etc/openvpn/static.key)
-</secret>
+<ca>
+$(cat /etc/openvpn/pki/ca.crt)
+</ca>
+<cert>
+$(cat /etc/openvpn/pki/issued/client.crt)
+</cert>
+<key>
+$(cat /etc/openvpn/pki/private/client.key)
+</key>
+tls-client
+EOF
 
-cipher BF-CBC
-data-ciphers-fallback BF-CBC
+chown root:root /var/www/localhost/htdocs/hotspot.ovpn
 EOF
 chmod 644 /var/www/localhost/htdocs/hotspot.ovpn
 cat >> /etc/apache2/httpd.conf << EOF
