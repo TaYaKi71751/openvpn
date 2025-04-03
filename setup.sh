@@ -7,10 +7,16 @@ cd /etc/openvpn/
 yes
 EOF
 /usr/share/easy-rsa/easyrsa build-ca nopass << EOF
+yes
+YES
 EOF
 /usr/share/easy-rsa/easyrsa build-server-full server nopass << EOF
+yes
+YES
 EOF
 /usr/share/easy-rsa/easyrsa build-client-full client nopass << EOF
+yes
+YES
 EOF
 cat > /etc/openvpn/server.conf << EOF
 port 1194
