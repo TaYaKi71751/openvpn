@@ -2,10 +2,16 @@
 apk update
 apk add openvpn easy-rsa
 apk add apache2
-/usr/share/easy-rsa/easyrsa init-pki
-/usr/share/easy-rsa/easyrsa build-ca nopass
-/usr/share/easy-rsa/easyrsa build-server-full server nopass
-/usr/share/easy-rsa/easyrsa build-client-full client nopass
+cd /etc/openvpn/
+/usr/share/easy-rsa/easyrsa init-pki << EOF
+yes
+EOF
+/usr/share/easy-rsa/easyrsa build-ca nopass << EOF
+EOF
+/usr/share/easy-rsa/easyrsa build-server-full server nopass << EOF
+EOF
+/usr/share/easy-rsa/easyrsa build-client-full client nopass << EOF
+EOF
 cat > /etc/openvpn/server.conf << EOF
 port 1194
 proto tcp
