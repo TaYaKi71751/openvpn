@@ -21,7 +21,7 @@ secret /etc/openvpn/static.key
 EOF
 npm i -g serve
 openvpn --genkey --secret /etc/openvpn/static.key
-cat > ~/hotspot.ovpn << EOF
+cat > /var/www/localhost/htdocs/hotspot.ovpn << EOF
 client
 dev tun
 proto tcp
@@ -36,9 +36,20 @@ verb 3
 $(cat /etc/openvpn/static.key)
 </secret>
 EOF
+chmod 644 /var/www/localhost/htdocs/hotspot.ovpn
+cat >> /etc/apache2/httpd.conf << EOF
+<Directory "/var/www/localhost/htdocs">
+    Options Indexes FollowSymLinks
+    AllowOverride None
+    Require all granted
+</Directory>
+
+AddType application/x-openvpn-profile .ovpn
+EOF
+
 echo 'echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf' >> ~/.profile
 echo 'sysctl -p' >> ~/.profile
 echo "cat /dev/location > /dev/null &" >> ~/.profile
-echo "serve &" >> ~/.profile
+echo "httpd -f &" >> ~/.profile
 echo "openvpn --config /etc/openvpn/server.conf" >> ~/.profile
 source ~/.profile
